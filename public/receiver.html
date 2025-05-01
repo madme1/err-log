@@ -84,16 +84,7 @@
             messagesContainer.prepend(messageElement);
         }
 
-        // First load existing messages
-        fetch('/get-messages')
-            .then(response => response.json())
-            .then(messages => {
-                messages.reverse().forEach(addMessage);
-            })
-            .catch(error => {
-                console.error('Error loading messages:', error);
-            });
-
+        // Only using SSE to receive both initial and live messages
         const eventSource = new EventSource('/events');
 
         eventSource.onmessage = (event) => {
