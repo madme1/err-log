@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Sender</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        textarea { width: 100%; height: 100px; margin-bottom: 10px; }
+        button { padding: 10px 15px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #status { margin-top: 10px; color: green; }
+    </style>
+</head>
+<body>
+    <h1>Send a Message</h1>
+    <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+    <button id="sendButton">Send Message</button>
+    <div id="status"></div>
+    <p><a href="/receiver" target="_blank">Open Receiver Page</a></p>
+
+    <script>
+        document.getElementById('sendButton').addEventListener('click', async () => {
+            const message = document.getElementById('messageInput').value.trim();
+            if (message) {
+                try {
+                    const response = await fetch('/send-message', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message })
+                    });
+                    
+                    if (response.ok) {
+                        document.getElementById('status').textContent = 'Message sent successfully!';
+                        document.getElementById('messageInput').value = '';
+                        setTimeout(() => {
+                            document.getElementById('status').textContent = '';
+                        }, 2000);
+                    } else {
+                        const error = await response.json();
+                        document.getElementById('status').textContent = error.error || 'Error sending message';
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    document.getElementById('status').textContent = 'Error sending message';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
