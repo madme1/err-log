@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 // Initialize SQLite database
-const db = new sqlite3.Database(':memory:'); // Use ':memory:' for temp db or 'messages.db' for file-based
+const db = new sqlite3.Database('messages.db'); // Use ':memory:' for temp db or 'messages.db' for file-based
 
 // Create messages table
 db.serialize(() => {
